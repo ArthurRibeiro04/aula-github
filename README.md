@@ -56,7 +56,7 @@ Dog agora possui uma instância privada de Animal (animalDelegate). Isso permite
 Foi adicionado o método bark à classe Dog, representando o comportamento específico de um cachorro.
 
 
-Referência: https://github.com/Pramoth-N/Advanced-Java/blob/master/day3-Polymorphism/workout/AnimalSound.java
+Referência: https://github.com/Pramoth-N/Advanced-Java/blob/master/day3-Polymorphism/workout/AnimalSound.java.
 
 
 # Shotgun Surgery
@@ -155,4 +155,89 @@ Nos métodos debit() e transfer(), substituímos a verificação direta pela cha
 
 Com a lógica centralizada, futuras alterações na regra de saldo mínimo podem ser feitas em um único local, reduzindo a chance de erros e facilitando a manutenção.
 
-Referência: https://gist.github.com/jimmykurian/1732868
+Referência: https://gist.github.com/jimmykurian/1732868.
+
+
+# Dead Code
+
+## O que é Dead Code?
+
+O code smell conhecido como Dead Code refere-se a partes do código que nunca são executadas ou utilizadas, como funções, classes ou variáveis não referenciadas. A presença de código morto pode aumentar a complexidade do sistema e dificultar sua manutenção.
+
+```python
+
+class UserManager:
+    def __init__(self):
+        self.users = []
+
+    def add_user(self, user):
+        self.users.append(user)
+        print(f"User {user} added.")
+
+    def remove_user(self, user):
+        if user in self.users:
+            self.users.remove(user)
+            print(f"User {user} removed.")
+        else:
+            print("User not found.")
+
+    def list_users(self):
+        for user in self.users:
+            print(user)
+
+    # Função não utilizada
+    def find_user_by_id(self, user_id):
+        for user in self.users:
+            if user.get('id') == user_id:
+                return user
+        return None
+
+    # Função não utilizada
+    def update_user_email(self, user_id, new_email):
+        for user in self.users:
+            if user.get('id') == user_id:
+                user['email'] = new_email
+                print(f"User {user_id} email updated to {new_email}")
+                return
+        print("User not found.")
+
+```
+
+Neste código, as funções **find_user_by_id** e **update_user_email** não são chamadas em nenhuma parte do sistema e não são necessárias no contexto atual. Elas representam código morto, o que pode causar confusão para desenvolvedores que acharem que essas funcionalidades ainda estão em uso.
+
+## Refatoração
+
+A abordagem mais direta para lidar com código morto é identificá-lo e removê-lo do código-base. Boas IDE`s podem auxiliar na detecção de tais trechos.
+
+```python
+
+class UserManager:
+    def __init__(self):
+        self.users = []
+
+    def add_user(self, user):
+        self.users.append(user)
+        print(f"User {user} added.")
+
+    def remove_user(self, user):
+        if user in self.users:
+            self.users.remove(user)
+            print(f"User {user} removed.")
+        else:
+            print("User not found.")
+
+    def list_users(self):
+        for user in self.users:
+            print(user)
+
+```
+
+## Correção
+
+Identificamos que as funções find_user_by_id e update_user_email não são utilizadas em nenhuma parte do sistema.
+
+Removemos ambas as funções para simplificar o código, tornando-o mais limpo e fácil de entender.
+
+Com menos código morto, o sistema fica mais legível e o entendimento das funcionalidades ativas se torna mais claro.
+
+Código feito por nós, com base nos códigos neste repositório: https://github.com/jendrikseipp/vulture.
